@@ -21,8 +21,8 @@ class Subscription {
 		"Hello! My name is ${name}"
 	}
 
-	@RequestMapping(value="/create}")
-	String create(@RequestParam(value="url", required=true) String url) {
+	@RequestMapping(value="/create")
+	String create(@RequestParam("url") String url) {
 		logger.info ">> url: ${url}"
 		url
 	}
