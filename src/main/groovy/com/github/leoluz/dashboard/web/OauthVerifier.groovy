@@ -1,5 +1,7 @@
 package com.github.leoluz.dashboard.web
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import sun.misc.BASE64Encoder
 
 import javax.crypto.Mac
@@ -14,6 +16,8 @@ class OauthVerifier {
 	private final String consumerSecret
 	private final HttpServletRequest request
 
+	private static final Logger logger = LoggerFactory.getLogger(OauthVerifier.class)
+
 	OauthVerifier(HttpServletRequest request, String consumerSecret) {
 		this.request = request
 		this.consumerSecret = consumerSecret
@@ -21,6 +25,8 @@ class OauthVerifier {
 
 	boolean hasValidSignature() {
 		def authHeader = request.getHeader(AUTHORIZATION)
+
+		logger.info(">>> ${authHeader}")
 
 		if (authHeader) {
 			def oauthParams = buildOauthParams(authHeader)
@@ -47,8 +53,8 @@ class OauthVerifier {
 					"oauth_signature_method",
 					"oauth_timestamp",
 					"oauth_version"]
-		def requestParams = oauthParams.subMap(keys)
-		queryParamsMap.each {
+		def requestParams = oauthParams?.subMap(keys)
+		queryParamsMap?.each {
 			requestParams << it
 		}
 		requestParams
