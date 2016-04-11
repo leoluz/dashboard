@@ -26,6 +26,8 @@ class OauthVerifier {
 	boolean hasValidSignature() {
 		def authHeader = request.getHeader(AUTHORIZATION)
 
+		logger.info(authHeader)
+
 		if (authHeader) {
 			def oauthParams = buildOauthParams(authHeader)
 			def queryParamsMap = buildQueryParamsMap(request.getParameterMap())
