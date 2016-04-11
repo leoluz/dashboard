@@ -32,9 +32,6 @@ class OauthVerifier {
 			def requestParams = buildRequestParams(queryParamsMap, oauthParams)
 			def computedSignature = computeSignature(request.getMethod(), request.getRequestURL().toString(), requestParams)
 
-			logger.info(">>> computed signature: ${computedSignature}")
-			logger.info(">>> header signature: ${decode(oauthParams.oauth_signature)}")
-
 			computedSignature == decode(oauthParams.oauth_signature)
 		} else {
 			false
@@ -77,7 +74,7 @@ class OauthVerifier {
 	String computeSignature(httpMethod, baseUrl, requestParams) {
 
 		def paramString = requestParams.sort().collect { key, value ->
-			"${key}=${value}"
+			"${encode(decode(key))}=${encode(decode(value))}"
 		}.join("&")
 
 		def signBaseString = "${httpMethod}&${encode(baseUrl)}&${encode(paramString)}"
