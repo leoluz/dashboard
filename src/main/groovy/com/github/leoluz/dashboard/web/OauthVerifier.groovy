@@ -26,8 +26,6 @@ class OauthVerifier {
 	boolean hasValidSignature() {
 		def authHeader = request.getHeader(AUTHORIZATION)
 
-		logger.info(authHeader)
-
 		if (authHeader) {
 			def oauthParams = buildOauthParams(authHeader)
 			def queryParamsMap = buildQueryParamsMap(request.getParameterMap())
@@ -67,7 +65,7 @@ class OauthVerifier {
 		def requestMap = [:]
 		split.each {
 			def entry = it.split("=")
-			requestMap << [(entry[0]): entry[1].replaceAll(/^"|"$/, "")]
+			requestMap << [(entry[0].trim()): entry[1].replaceAll(/^"|"$/, "").trim()]
 		}
 		requestMap.findAll { it =~ /^oauth_.+/ }
 	}
@@ -88,10 +86,18 @@ class OauthVerifier {
 	}
 
 	def encode(string) {
-		URLEncoder.encode(string, "UTF-8")
+		if (string) {
+			URLEncoder.encode(string, "UTF-8")
+		} else {
+			null
+		}
 	}
 
 	def decode(string) {
-		URLDecoder.decode(string, "UTF-8")
+		if (string) {
+			URLDecoder.decode(string, "UTF-8")
+		} else {
+			null
+		}
 	}
 }

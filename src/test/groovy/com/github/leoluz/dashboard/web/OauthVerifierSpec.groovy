@@ -20,7 +20,7 @@ class OauthVerifierSpec extends Specification {
 		given:
 		StringBuffer url = new StringBuffer("https://appdirect-dashboard.herokuapp.com/api/subscriptions/create")
 		request.getMethod() >> "GET"
-		request.getHeader(AUTHORIZATION) >> 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="appdirectdashboard-102404",oauth_timestamp="1460239382",oauth_nonce="791448561331883136",oauth_signature_method="HMAC-SHA1",oauth_signature="wTOafLvDrj4XSM0rqI%2BI7JqfPes%3D"'
+		request.getHeader(AUTHORIZATION) >> 'OAuth realm="", oauth_version="1.0", oauth_consumer_key="appdirectdashboard-102404", oauth_timestamp="1460239382", oauth_nonce="791448561331883136", oauth_signature_method="HMAC-SHA1", oauth_signature="wTOafLvDrj4XSM0rqI%2BI7JqfPes%3D"'
 		request.getParameterMap() >> [url: ["https%3A%2F%2Fwww.appdirect.com%2Fapi%2Fintegration%2Fv1%2Fevents%2FdummyOrder"]]
 		request.getRequestURL() >> url
 
