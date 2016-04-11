@@ -31,6 +31,10 @@ class OauthVerifier {
 			def queryParamsMap = buildQueryParamsMap(request.getParameterMap())
 			def requestParams = buildRequestParams(queryParamsMap, oauthParams)
 			def computedSignature = computeSignature(request.getMethod(), request.getRequestURL().toString(), requestParams)
+
+			logger.info(">>> computed signature: ${computedSignature}")
+			logger.info(">>> header signature: ${decode(oauthParams.oauth_signature)}")
+
 			computedSignature == decode(oauthParams.oauth_signature)
 		} else {
 			false
