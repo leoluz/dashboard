@@ -1,4 +1,4 @@
-package com.github.leoluz.dashboard.api
+package com.github.leoluz.dashboard.web.api
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,9 +20,6 @@ class Subscription {
 	ResponseEntity<?> create(@RequestParam("url") String url,
 							 @RequestHeader HttpHeaders headers) {
 
-		headers.toSingleValueMap().each { key, value ->
-			logger.info ">> ${key}: ${value}"
-		}
 		def responseBody = [ success: true,
 							 accountIdentifier: "new-account-identifier" ]
 		new ResponseEntity<>(responseBody, HttpStatus.CREATED)
