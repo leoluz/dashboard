@@ -14,27 +14,27 @@ import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 
 class OauthFilter implements Filter {
 
-	private String consumerSecret
+    private String consumerSecret
 
-	@Override
-	void init(FilterConfig filterConfig) throws ServletException {
-		consumerSecret = filterConfig.getInitParameter("consumerSecret")
-	}
+    @Override
+    void init(FilterConfig filterConfig) throws ServletException {
+        consumerSecret = filterConfig.getInitParameter("consumerSecret")
+    }
 
-	@Override
-	void destroy() {
-	}
+    @Override
+    void destroy() {
+    }
 
-	@Override
-	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest req = (HttpServletRequest) request
-		HttpServletResponse res = (HttpServletResponse) response
+    @Override
+    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest req = (HttpServletRequest) request
+        HttpServletResponse res = (HttpServletResponse) response
 
-		OauthVerifier oauthVerifier = new OauthVerifier(req, consumerSecret)
-		if (oauthVerifier.hasValidSignature()) {
-			chain.doFilter(request, response)
-		} else {
-			res.sendError(HTTP_UNAUTHORIZED, "Invalid Oauth signature!")
-		}
-	}
+        OauthVerifier oauthVerifier = new OauthVerifier(req, consumerSecret)
+        if (oauthVerifier.hasValidSignature()) {
+            chain.doFilter(request, response)
+        } else {
+            res.sendError(HTTP_UNAUTHORIZED, "Invalid Oauth signature!")
+        }
+    }
 }

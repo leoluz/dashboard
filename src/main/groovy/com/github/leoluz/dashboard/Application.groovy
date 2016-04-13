@@ -10,20 +10,20 @@ import org.springframework.context.annotation.Bean
 @SpringBootApplication
 class Application {
 
-	@Autowired
-	private Config config
+    @Autowired
+    private Config config
 
-	@Bean
-	public FilterRegistrationBean filterRegistrationBean() {
-		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean()
-		OauthFilter oauthVerifier = new OauthFilter()
-		filterRegistrationBean.setFilter(oauthVerifier)
-		filterRegistrationBean.addUrlPatterns("/api/*")
-		filterRegistrationBean.addInitParameter("consumerSecret", config.CONSUMER_SECRET)
-		filterRegistrationBean
-	}
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean()
+        OauthFilter oauthVerifier = new OauthFilter()
+        filterRegistrationBean.setFilter(oauthVerifier)
+        filterRegistrationBean.addUrlPatterns("/api/*")
+        filterRegistrationBean.addInitParameter("consumerSecret", config.CONSUMER_SECRET)
+        filterRegistrationBean
+    }
 
-	static void main(String[] args) {
-		SpringApplication.run Application, args
-	}
+    static void main(String[] args) {
+        SpringApplication.run Application, args
+    }
 }

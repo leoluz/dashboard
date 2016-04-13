@@ -10,14 +10,14 @@ import org.springframework.web.servlet.ModelAndView
 @Controller
 class HomeController {
 
-	@Autowired
-	UserService userService
+    @Autowired
+    UserService userService
 
-	@RequestMapping("/")
-	def home() {
-		def model = [bootVersion: Banner.package.implementationVersion,
-					 groovyVersion: GroovySystem.version,
-					 users: userService.users]
-		new ModelAndView("views/home", model)
-	}
+    @RequestMapping("/")
+    def home() {
+        def model = [bootVersion  : Banner.package.implementationVersion,
+                     groovyVersion: GroovySystem.version,
+                     users        : userService.users]
+        new ModelAndView("views/home", model)
+    }
 }

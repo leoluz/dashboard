@@ -27,42 +27,42 @@ import static org.apache.http.HttpHeaders.ACCEPT
 @RequestMapping("/api/subscriptions")
 class Subscription {
 
-	private static final Logger logger = LoggerFactory.getLogger(Subscription.class)
+    private static final Logger logger = LoggerFactory.getLogger(Subscription.class)
 
-	@Autowired
-	UserService userService
+    @Autowired
+    UserService userService
 
-	@Autowired
-	Config config
+    @Autowired
+    Config config
 
-	@RequestMapping(value = "/create")
-	ResponseEntity<?> create(@RequestParam("url") String url,
-							 @RequestHeader HttpHeaders headers) {
+    @RequestMapping(value = "/create")
+    ResponseEntity<?> create(@RequestParam("url") String url,
+                             @RequestHeader HttpHeaders headers) {
 
-		OAuthConsumer consumer = new CommonsHttpOAuthConsumer(config.CONSUMER_KEY, config.CONSUMER_SECRET)
-		HttpGet request = new HttpGet(url)
-		request.addHeader(ACCEPT, "application/json")
-		consumer.sign(request)
-		CloseableHttpClient client = HttpClients.createDefault()
-		CloseableHttpResponse response = client.execute(request)
-		def json
-		if (response.statusLine.statusCode == 200) {
-			def slurper = new JsonSlurper()
-			json = slurper.parse(response.getEntity().getContent())
-		}
-		client.close()
-		response.close()
+        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(config.CONSUMER_KEY, config.CONSUMER_SECRET)
+        HttpGet request = new HttpGet(url)
+        request.addHeader(ACCEPT, "application/json")
+        consumer.sign(request)
+        CloseableHttpClient client = HttpClients.createDefault()
+        CloseableHttpResponse response = client.execute(request)
+        def json
+        if (response.statusLine.statusCode == 200) {
+            def slurper = new JsonSlurper()
+            json = slurper.parse(response.getEntity().getContent())
+        }
+        client.close()
+        response.close()
 
-		User user = userService.create(json?.creator?.email, json?.payload?.order?.editionCode)
+        User user = userService.create(json?.creator?.email, json?.payload?.order?.editionCode)
 
-		//TODO
-		def responseBody = [ success: true,
-							 accountIdentifier: user.id ]
-		new ResponseEntity<>(responseBody, HttpStatus.CREATED)
-	}
+        //TODO
+        def responseBody = [success          : true,
+                            accountIdentifier: user.id]
+        new ResponseEntity<>(responseBody, HttpStatus.CREATED)
+    }
 
-	@RequestMapping(value = "/change")
-	ResponseEntity<?> change(@RequestParam("url") String url) {
+    @RequestMapping(value = "/change")
+    ResponseEntity<?> change(@RequestParam("url") String url) {
 
-	}
+    }
 }
