@@ -19,7 +19,7 @@ class UserService {
 		} else {
 			User user = new User(email, edition)
 			users << user
-			user.id
+			user
 		}
 	}
 

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component
 @Immutable
 class Config {
 
+	@Value('${CONSUMER_KEY}')
+	String CONSUMER_KEY
+
 	@Value('${CONSUMER_SECRET}')
 	String CONSUMER_SECRET
 }

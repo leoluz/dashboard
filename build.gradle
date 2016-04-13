@@ -1,7 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '1.3.3.RELEASE'
-		groovyVersion = '2.4.4'
+		groovyVersion = '2.4.5'
 	}
 	repositories {
 		mavenCentral()
@@ -33,8 +33,11 @@ configurations {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile "org.codehaus.groovy:groovy:${groovyVersion}"
+	compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
 	compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
+	compile "org.apache.httpcomponents:httpclient:4.5.2"
+	compile "oauth.signpost:signpost-commonshttp4:1.2.1.2"
+
 
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 

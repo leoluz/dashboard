@@ -20,10 +20,11 @@ class UserServiceSpec extends Specification {
 
 	def "will create a new user"() {
 		when:
-		userId = userService.create("someEmail", "free")
+		User user = userService.create("someEmail", "free")
+		userId = user.id
 
 		then:
-		userId != null
+		user != null
 	}
 
 	def "will raise error when try to create with same email"() {
