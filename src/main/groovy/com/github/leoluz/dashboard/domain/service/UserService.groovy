@@ -35,4 +35,8 @@ class UserService {
         }
 
     }
+
+    def delete(userId) {
+        users.removeAll {it.id == userId}
+    }
 }

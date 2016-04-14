@@ -18,10 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
-import static org.springframework.http.HttpStatus.CONFLICT
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
-import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.OK
 
 @RestController
@@ -44,7 +40,7 @@ class Subscription {
                              @RequestHeader HttpHeaders headers) {
 
         Response response = client.get(url, buildOauthKeys())
-        def responseBody, status
+        def responseBody
 
 
         if (response.status == 200) {
@@ -54,17 +50,13 @@ class Subscription {
 
                 responseBody = [success          : true,
                                 accountIdentifier: user.id]
-                status = CREATED
             } catch (UserConflictException e) {
                 responseBody = [success: false,
                                 errorCode: "USER_ALREADY_EXISTS"]
-                status = CONFLICT
             }
         } else {
             responseBody = [success: false,
-                            errorCode: "UNKNOWN_ERROR",
-                            message: "Http error: ${response.status}"]
-            status = INTERNAL_SERVER_ERROR
+                            errorCode: "UNKNOWN_ERROR"]
         }
         new ResponseEntity<>(responseBody, OK)
     }
@@ -73,27 +65,36 @@ class Subscription {
     ResponseEntity<?> change(@RequestParam("url") String url) {
 
         Response response = client.get(url, buildOauthKeys())
-        def responseBody, status
+        def responseBody
 
         if (response.status == 200) {
             try {
                 userService.update(buildUser(response.body))
                 responseBody = [success: true]
-                status = OK
             } catch (UserNotFoundException exception) {
                 responseBody = [success: false,
                                 errorCode: "USER_NOT_FOUND"]
-                status = NOT_FOUND
             }
         } else {
             responseBody = [success: false,
-                            errorCode: "UNKNOWN_ERROR",
-                            message: "Http error: ${response.status}"]
-            status = INTERNAL_SERVER_ERROR
+                            errorCode: "UNKNOWN_ERROR"]
         }
-
         new ResponseEntity<>(responseBody, OK)
+    }
 
+    @RequestMapping(value = "/cancel")
+    ResponseEntity<?> cancel(@RequestParam("url") String url) {
+        Response response = client.get(url, buildOauthKeys())
+        def responseBody
+
+        if (response.status == 200) {
+            userService.delete(responseBody?.payload?.account?.accountIdentifier)
+            responseBody = [success: true]
+        } else {
+            responseBody = [success: false,
+                            errorCode: "UNKNOWN_ERROR"]
+        }
+        new ResponseEntity<>(responseBody, OK)
     }
 
     def buildUser(responseBody) {
