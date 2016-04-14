@@ -66,7 +66,7 @@ class Subscription {
                             message: "Http error: ${response.status}"]
             status = INTERNAL_SERVER_ERROR
         }
-        new ResponseEntity<>(responseBody, status)
+        new ResponseEntity<>(responseBody, OK)
     }
 
     @RequestMapping(value = "/change")
@@ -92,7 +92,7 @@ class Subscription {
             status = INTERNAL_SERVER_ERROR
         }
 
-        new ResponseEntity<>(responseBody, status)
+        new ResponseEntity<>(responseBody, OK)
 
     }
 
