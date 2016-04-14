@@ -38,11 +38,10 @@ class SubscriptionsResource {
     @RequestMapping(value = "/create")
     ResponseEntity<?> create(@RequestParam("url") String url,
                              @RequestHeader HttpHeaders headers) {
-
         Response response = client.get(url, buildOauthKeys())
+        logger.info("Create event: ${response.body}")
+
         def responseBody
-
-
         if (response.status == 200) {
             Subscription subscription = subscriptionService.
                     create(response?.body?.creator?.email, response?.body?.payload?.order?.editionCode)
@@ -58,10 +57,10 @@ class SubscriptionsResource {
 
     @RequestMapping(value = "/change")
     ResponseEntity<?> change(@RequestParam("url") String url) {
-
         Response response = client.get(url, buildOauthKeys())
-        def responseBody
+        logger.info("Change event: ${response.body}")
 
+        def responseBody
         if (response.status == 200) {
             try {
                 subscriptionService.update(buildSubscription(response.body))
@@ -80,10 +79,11 @@ class SubscriptionsResource {
     @RequestMapping(value = "/cancel")
     ResponseEntity<?> cancel(@RequestParam("url") String url) {
         Response response = client.get(url, buildOauthKeys())
-        def responseBody
+        logger.info("Cancel event: ${response.body}")
 
+        def responseBody
         if (response.status == 200) {
-            subscriptionService.delete(responseBody?.payload?.account?.accountIdentifier)
+            subscriptionService.delete(response?.body?.payload?.account?.accountIdentifier)
             responseBody = [success: true]
         } else {
             responseBody = [success: false,
