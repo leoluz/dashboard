@@ -1,9 +1,9 @@
 package com.github.leoluz.dashboard.domain
 
-class User {
+class Subscription {
     String id, email, edition
 
-    public User(id = null, email, edition) {
+    public Subscription(id = null, email, edition) {
         if (id) {
             this.id = id
         } else {
@@ -17,9 +17,9 @@ class User {
         if (this.is(o)) return true
         if (getClass() != o.class) return false
 
-        User user = (User) o
+        Subscription subscription = (Subscription) o
 
-        if (id != user.id) return false
+        if (id != subscription.id) return false
 
         return true
     }

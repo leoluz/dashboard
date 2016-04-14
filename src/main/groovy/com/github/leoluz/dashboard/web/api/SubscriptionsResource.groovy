@@ -1,10 +1,10 @@
 package com.github.leoluz.dashboard.web.api
 
 import com.github.leoluz.dashboard.Config
-import com.github.leoluz.dashboard.domain.User
-import com.github.leoluz.dashboard.domain.service.UserConflictException
-import com.github.leoluz.dashboard.domain.service.UserNotFoundException
-import com.github.leoluz.dashboard.domain.service.UserService
+import com.github.leoluz.dashboard.domain.Subscription
+
+import com.github.leoluz.dashboard.domain.service.SubscriptionNotFoundException
+import com.github.leoluz.dashboard.domain.service.SubscriptionService
 import com.github.leoluz.dashboard.infra.http.OauthKeys
 import com.github.leoluz.dashboard.infra.http.Response
 import com.github.leoluz.dashboard.infra.http.RestClient
@@ -22,12 +22,12 @@ import static org.springframework.http.HttpStatus.OK
 
 @RestController
 @RequestMapping("/api/subscriptions")
-class Subscription {
+class SubscriptionsResource {
 
-    private static final Logger logger = LoggerFactory.getLogger(Subscription.class)
+    private static final Logger logger = LoggerFactory.getLogger(SubscriptionsResource.class)
 
     @Autowired
-    UserService userService
+    SubscriptionService subscriptionService
 
     @Autowired
     RestClient client
@@ -44,16 +44,11 @@ class Subscription {
 
 
         if (response.status == 200) {
-            try {
-                User user = userService.
-                        create(response?.body?.creator?.email, response?.body?.payload?.order?.editionCode)
+            Subscription subscription = subscriptionService.
+                    create(response?.body?.creator?.email, response?.body?.payload?.order?.editionCode)
 
-                responseBody = [success          : true,
-                                accountIdentifier: user.id]
-            } catch (UserConflictException e) {
-                responseBody = [success: false,
-                                errorCode: "USER_ALREADY_EXISTS"]
-            }
+            responseBody = [success          : true,
+                            accountIdentifier: subscription.id]
         } else {
             responseBody = [success: false,
                             errorCode: "UNKNOWN_ERROR"]
@@ -69,9 +64,9 @@ class Subscription {
 
         if (response.status == 200) {
             try {
-                userService.update(buildUser(response.body))
+                subscriptionService.update(buildSubscription(response.body))
                 responseBody = [success: true]
-            } catch (UserNotFoundException exception) {
+            } catch (SubscriptionNotFoundException exception) {
                 responseBody = [success: false,
                                 errorCode: "USER_NOT_FOUND"]
             }
@@ -88,7 +83,7 @@ class Subscription {
         def responseBody
 
         if (response.status == 200) {
-            userService.delete(responseBody?.payload?.account?.accountIdentifier)
+            subscriptionService.delete(responseBody?.payload?.account?.accountIdentifier)
             responseBody = [success: true]
         } else {
             responseBody = [success: false,
@@ -97,11 +92,11 @@ class Subscription {
         new ResponseEntity<>(responseBody, OK)
     }
 
-    def buildUser(responseBody) {
+    def buildSubscription(responseBody) {
         def id = responseBody?.payload?.account?.accountIdentifier
         def email = responseBody?.creator?.email
         def edition = responseBody?.payload?.order?.editionCode
-        new User(id, email, edition)
+        new Subscription(id, email, edition)
     }
 
     def buildOauthKeys() {
