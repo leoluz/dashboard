@@ -8,6 +8,7 @@ import com.github.leoluz.dashboard.domain.service.SubscriptionService
 import com.github.leoluz.dashboard.infra.http.OauthKeys
 import com.github.leoluz.dashboard.infra.http.Response
 import com.github.leoluz.dashboard.infra.http.RestClient
+import groovy.json.JsonBuilder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,7 +40,7 @@ class SubscriptionsResource {
     ResponseEntity<?> create(@RequestParam("url") String url,
                              @RequestHeader HttpHeaders headers) {
         Response response = client.get(url, buildOauthKeys())
-        logger.info("Create event: ${response.body}")
+        logger.info("Create event:\n ${(new JsonBuilder(response.body)).toPrettyString()}")
 
         def responseBody
         if (response.status == 200) {
@@ -58,7 +59,7 @@ class SubscriptionsResource {
     @RequestMapping(value = "/change")
     ResponseEntity<?> change(@RequestParam("url") String url) {
         Response response = client.get(url, buildOauthKeys())
-        logger.info("Change event: ${response.body}")
+        logger.info("Change event:\n ${(new JsonBuilder(response.body)).toPrettyString()}")
 
         def responseBody
         if (response.status == 200) {
@@ -79,7 +80,7 @@ class SubscriptionsResource {
     @RequestMapping(value = "/cancel")
     ResponseEntity<?> cancel(@RequestParam("url") String url) {
         Response response = client.get(url, buildOauthKeys())
-        logger.info("Cancel event: ${response.body}")
+        logger.info("Cancel event:\n ${(new JsonBuilder(response.body)).toPrettyString()}")
 
         def responseBody
         if (response.status == 200) {

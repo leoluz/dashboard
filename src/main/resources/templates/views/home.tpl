@@ -1,13 +1,13 @@
-layout 'layouts/main.tpl',
-        pageTitle: 'Spring Boot - Groovy templates example with layout',
+layout 'layouts/main.tpl', true,
+        pageTitle: 'Subscriptions',
         mainBody: contents {
-            div("This is an application using Boot $bootVersion and Groovy templates $groovyVersion")
-            p("List of subscriptions:")
-            ul {
-                subscriptions.each { subscription ->
-                    li {
-                        yield "${subscription.id}: ${subscription.email} (${subscription.edition})"
+            div(class: 'container') {
+                div(class: 'navbar') {
+                    div(class: 'navbar-inner') {
+                        h1('AppDirect Dashboard')
                     }
                 }
+                include template: 'views/subscriptions.tpl'
             }
+            include template: 'views/footer.tpl'
         }

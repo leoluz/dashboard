@@ -42,11 +42,9 @@ class RestClient {
     }
 
     def parseHeaders(headers) {
-        def headersMap = [:]
-        headers?.each {
-            headersMap << [(it.getName()): it.getValue()]
+        headers?.collectEntries {
+            [(it.getName()): it.getValue()]
         }
-        headersMap
     }
     def parseEntity(entity) {
         if (entity) {

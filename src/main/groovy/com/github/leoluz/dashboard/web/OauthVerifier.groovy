@@ -39,11 +39,9 @@ class OauthVerifier {
     }
 
     def buildQueryParamsMap(queryParams) {
-        def queryParamsMap = [:]
-        queryParams.each { key, value ->
-            queryParamsMap << [(key): value[0]]
+        queryParams.collectEntries { key, value ->
+            [(key): value[0]]
         }
-        queryParamsMap
     }
 
     def buildRequestParams(queryParamsMap, oauthParams) {
@@ -63,10 +61,9 @@ class OauthVerifier {
 
         def authStr = authHeader.replaceAll(/^OAuth /, "")
         def split = authStr.split(",")
-        def requestMap = [:]
-        split.each {
+        def requestMap = split.collectEntries {
             def entry = it.split("=")
-            requestMap << [(entry[0].trim()): entry[1].replaceAll(/^"|"$/, "").trim()]
+            [(entry[0].trim()): entry[1].replaceAll(/^"|"$/, "").trim()]
         }
         requestMap.findAll { it =~ /^oauth_.+/ }
     }
