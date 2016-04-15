@@ -93,6 +93,24 @@ class SubscriptionsResource {
         new ResponseEntity<>(responseBody, OK)
     }
 
+    @RequestMapping(value = "/assign")
+    ResponseEntity<?> assignUser(@RequestParam("url") String url) {
+        Response response = client.get(url, buildOauthKeys())
+        logger.info("Assign event:\n ${(new JsonBuilder(response.body)).toPrettyString()}")
+
+        def responseBody
+        new ResponseEntity<>(responseBody, OK)
+    }
+
+    @RequestMapping(value = "/unassign")
+    ResponseEntity<?> unassignUser(@RequestParam("url") String url) {
+        Response response = client.get(url, buildOauthKeys())
+        logger.info("Unassign event:\n ${(new JsonBuilder(response.body)).toPrettyString()}")
+
+        def responseBody
+        new ResponseEntity<>(responseBody, OK)
+    }
+
     def buildSubscription(responseBody) {
         def id = responseBody?.payload?.account?.accountIdentifier
         def email = responseBody?.creator?.email
