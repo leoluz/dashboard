@@ -20,7 +20,7 @@ class SubscriptionServiceSpec extends Specification {
 
 	def "will create a new subscription"() {
 		when:
-		Subscription subscription = subscriptionService.create("someEmail", "free")
+		Subscription subscription = subscriptionService.create("free")
 		subscriptionId = subscription.id
 
 		then:
@@ -29,7 +29,7 @@ class SubscriptionServiceSpec extends Specification {
 
 	def "will return the correct number of subscriptions"() {
 		when:
-		subscriptionService.create("anotherEmail", "free")
+		subscriptionService.create("free")
 
 		then:
 		subscriptionService.subscriptions.size() == 2
@@ -37,20 +37,19 @@ class SubscriptionServiceSpec extends Specification {
 
 	def "will update existing subscription"() {
 		given:
-		Subscription subscription = new Subscription(subscriptionId, "updateEmail", "paid")
+		Subscription subscription = new Subscription(subscriptionId, "paid")
 
 		when:
 		Subscription updatedSubscription = subscriptionService.update(subscription)
 
 		then:
-		updatedSubscription.email == "updateEmail"
 		updatedSubscription.edition == "paid"
 		subscriptionService.subscriptions.size() == 2
 	}
 
 	def "will raise error when updating non existing subscription"() {
 		given:
-		Subscription subscription = new Subscription("nonexisting", "free")
+		Subscription subscription = new Subscription("free")
 
 		when:
 		subscriptionService.update(subscription)

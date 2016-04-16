@@ -1,16 +1,17 @@
 package com.github.leoluz.dashboard.domain
 
 class Subscription {
-    String id, email, edition
+    String id, edition
+    Set<String> users
 
-    public Subscription(id = null, email, edition) {
+    public Subscription(id = null, edition) {
         if (id) {
             this.id = id
         } else {
             this.id = UUID.randomUUID().toString()
         }
-        this.email = email
         this.edition = edition
+        this.users = [] as Set
     }
 
     boolean equals(o) {

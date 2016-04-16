@@ -12,8 +12,8 @@ class SubscriptionService {
     Set<Subscription> subscriptions = Collections.synchronizedSet([] as Set)
 
     @Synchronized
-    def create(email, edition) {
-        Subscription subscription = new Subscription(email, edition)
+    def create(edition) {
+        Subscription subscription = new Subscription(edition)
         subscriptions << subscription
         subscription
     }
@@ -22,7 +22,6 @@ class SubscriptionService {
     def update(Subscription subscription) {
         if (subscription in subscriptions) {
             Subscription updateSubscription = subscriptions.find { it.id == subscription.id }
-            updateSubscription.email = subscription.email
             updateSubscription.edition = subscription.edition
             updateSubscription
         } else {
@@ -33,5 +32,19 @@ class SubscriptionService {
 
     def delete(subscriptionId) {
         subscriptions.removeAll {it.id == subscriptionId}
+    }
+
+    @Synchronized
+    def addUser(subscriptionId, email) {
+        def subscription = subscriptions.find { it.id = subscriptionId }
+        subscription.users << email
+        true
+    }
+
+    @Synchronized
+    def removeUser(subscriptionId, email) {
+        def subscription = subscriptions.find { it.id = subscriptionId }
+        subscription.users.remove(email)
+        true
     }
 }

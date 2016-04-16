@@ -45,7 +45,8 @@ class SubscriptionsResource {
         def responseBody
         if (response.status == 200) {
             Subscription subscription = subscriptionService.
-                    create(response?.body?.creator?.email, response?.body?.payload?.order?.editionCode)
+                    create(response?.body?.payload?.order?.editionCode)
+            subscriptionService.addUser(subscription.id, response?.body?.creator?.email)
 
             responseBody = [success          : true,
                             accountIdentifier: subscription.id]
@@ -84,7 +85,7 @@ class SubscriptionsResource {
 
         def responseBody
         if (response.status == 200) {
-            subscriptionService.delete(response?.body?.payload?.account?.accountIdentifier)
+            subscriptionService.delete(getSubscriptionId(response))
             responseBody = [success: true]
         } else {
             responseBody = [success: false,
@@ -99,6 +100,13 @@ class SubscriptionsResource {
         logger.info("Assign event:\n ${(new JsonBuilder(response.body)).toPrettyString()}")
 
         def responseBody
+        if (response.status == 200) {
+            subscriptionService.addUser(getSubscriptionId(response), getUserEmail(response))
+            responseBody = [success: true]
+        } else {
+            responseBody = [success: false,
+                            errorCode: "UNKNOWN_ERROR"]
+        }
         new ResponseEntity<>(responseBody, OK)
     }
 
@@ -108,6 +116,13 @@ class SubscriptionsResource {
         logger.info("Unassign event:\n ${(new JsonBuilder(response.body)).toPrettyString()}")
 
         def responseBody
+        if (response.status == 200) {
+            subscriptionService.removeUser(getSubscriptionId(response), getUserEmail(response))
+            responseBody = [success: true]
+        } else {
+            responseBody = [success: false,
+                            errorCode: "UNKNOWN_ERROR"]
+        }
         new ResponseEntity<>(responseBody, OK)
     }
 
@@ -125,5 +140,13 @@ class SubscriptionsResource {
             consumerSecret = config.CONSUMER_SECRET
         }
         keys
+    }
+
+    def getSubscriptionId(response) {
+        response?.body?.payload?.account?.accountIdentifier
+    }
+
+    def getUserEmail(response) {
+        response?.body?.payload?.user?.email
     }
 }
