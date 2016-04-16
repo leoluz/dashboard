@@ -21,7 +21,7 @@ Technologies overview:
 
 This project was built with the following technologies:
 
-* [Spring-boot][1]
+* [Spring Boot][1]
 * [Groovy][2]
 * [Gradle][3]
 * [Groovy Template Engine][4]
