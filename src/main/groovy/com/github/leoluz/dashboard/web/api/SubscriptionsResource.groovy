@@ -148,8 +148,8 @@ class SubscriptionsResource {
     }
 
     def buildUser(response) {
-        User user = new User()
-        user.email = response?.body?.payload?.user?.email
-        user.name = response?.body?.payload?.user?.firstName
+        def email = response?.body?.payload?.user?.email
+        def name = response?.body?.payload?.user?.firstName
+        new User(name, email)
     }
 }
