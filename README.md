@@ -12,7 +12,7 @@ This project integrates with the following AppDirect events:
 For all the events above it will check the oauth signature validity first. 
 In case the signature is not valid it will return 401 Unauthorized error code.
 
-It is deployed in [Heroku][5] under the following url:
+This project is deployed in [Heroku][5] under the following url:
 
 * https://appdirect-dashboard.herokuapp.com/
 
@@ -25,6 +25,7 @@ This project was built with the following technologies:
 * [Groovy][2]
 * [Gradle][3]
 * [Groovy Template Engine][4]
+* [Spock][6]
 
 Pre-reqs:
 --------
@@ -64,3 +65,4 @@ Running:
 [3]: http://gradle.org/                          "Gradle"
 [4]: http://docs.groovy-lang.org/docs/next/html/documentation/template-engines.html#_the_markuptemplateengine "Groovy Template"                         "Gradle"
 [5]: https://www.heroku.com/home                 "Heroku"
+[6]: http://spockframework.github.io/spock/docs/1.0/index.html "Spock"
