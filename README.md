@@ -37,13 +37,13 @@ Generating the war file:
 
 1. Clone this repo.
 
-    `$ git clone git@github.com:leoluz/java-web-template.git`
+    `$ git clone git@github.com:leoluz/dashboard.git`
 
 2. At project root directory run:
 
     `$ ./gradlew build`
 
-A war file will be generated at `<project-home>/build/lib` directory.
+A war file will be generated at `<project-home>/build/libs` directory.
 
 Running:
 --------
