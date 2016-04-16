@@ -35,16 +35,16 @@ class SubscriptionService {
     }
 
     @Synchronized
-    def addUser(subscriptionId, email) {
-        def subscription = subscriptions.find { it.id = subscriptionId }
-        subscription.users << email
+    def addUser(subscriptionId, user) {
+        def subscription = subscriptions.find { it.id == subscriptionId }
+        subscription.users << user
         true
     }
 
     @Synchronized
-    def removeUser(subscriptionId, email) {
-        def subscription = subscriptions.find { it.id = subscriptionId }
-        subscription.users.remove(email)
+    def removeUser(subscriptionId, user) {
+        def subscription = subscriptions.find { it.id == subscriptionId }
+        subscription.users.remove(user)
         true
     }
 }

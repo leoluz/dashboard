@@ -14,7 +14,7 @@ table(class: 'table table-striped') {
                 th("${subscription.edition}")
                 th {
                     subscription.users.each { user ->
-                        p(user)
+                        p("${user.name} (${user.email})")
                     }
                 }
             }

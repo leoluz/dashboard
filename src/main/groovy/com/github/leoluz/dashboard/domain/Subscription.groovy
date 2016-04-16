@@ -2,7 +2,7 @@ package com.github.leoluz.dashboard.domain
 
 class Subscription {
     String id, edition
-    Set<String> users
+    Set<User> users
 
     public Subscription(id = null, edition) {
         if (id) {

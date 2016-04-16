@@ -2,7 +2,7 @@ package com.github.leoluz.dashboard.web.api
 
 import com.github.leoluz.dashboard.Config
 import com.github.leoluz.dashboard.domain.Subscription
-
+import com.github.leoluz.dashboard.domain.User
 import com.github.leoluz.dashboard.domain.service.SubscriptionNotFoundException
 import com.github.leoluz.dashboard.domain.service.SubscriptionService
 import com.github.leoluz.dashboard.infra.http.OauthKeys
@@ -46,7 +46,9 @@ class SubscriptionsResource {
         if (response.status == 200) {
             Subscription subscription = subscriptionService.
                     create(response?.body?.payload?.order?.editionCode)
-            subscriptionService.addUser(subscription.id, response?.body?.creator?.email)
+
+            def user = new User(response?.body?.creator?.firstName, response?.body?.creator?.email)
+            subscriptionService.addUser(subscription.id, user)
 
             responseBody = [success          : true,
                             accountIdentifier: subscription.id]
@@ -101,7 +103,7 @@ class SubscriptionsResource {
 
         def responseBody
         if (response.status == 200) {
-            subscriptionService.addUser(getSubscriptionId(response), getUserEmail(response))
+            subscriptionService.addUser(getSubscriptionId(response), buildUser(response))
             responseBody = [success: true]
         } else {
             responseBody = [success: false,
@@ -117,7 +119,7 @@ class SubscriptionsResource {
 
         def responseBody
         if (response.status == 200) {
-            subscriptionService.removeUser(getSubscriptionId(response), getUserEmail(response))
+            subscriptionService.removeUser(getSubscriptionId(response), buildUser(response))
             responseBody = [success: true]
         } else {
             responseBody = [success: false,
@@ -128,9 +130,8 @@ class SubscriptionsResource {
 
     def buildSubscription(responseBody) {
         def id = responseBody?.payload?.account?.accountIdentifier
-        def email = responseBody?.creator?.email
         def edition = responseBody?.payload?.order?.editionCode
-        new Subscription(id, email, edition)
+        new Subscription(id, edition)
     }
 
     def buildOauthKeys() {
@@ -146,7 +147,9 @@ class SubscriptionsResource {
         response?.body?.payload?.account?.accountIdentifier
     }
 
-    def getUserEmail(response) {
-        response?.body?.payload?.user?.email
+    def buildUser(response) {
+        User user = new User()
+        user.email = response?.body?.payload?.user?.email
+        user.name = response?.body?.payload?.user?.firstName
     }
 }
